@@ -1,33 +1,34 @@
 #include <Arduino.h>
-
+#include <stdio.h>
+#include <string.h>
 #include <esp32_smartdisplay.h>
 #include "lvgl.h"
 #include <src/extra/libs/qrcode/lv_qrcode.h>
 
-
+//Test Git
 static lv_obj_t * meter;
 
 void lv_background(void)
 {
-    static lv_style_t style;
-    lv_style_init(&style);
+  static lv_style_t style;
+  lv_style_init(&style);
 
     /*Set a background color and a radius*/
-    lv_style_set_radius(&style, 5);
-    lv_style_set_bg_opa(&style, LV_OPA_COVER);
-    lv_style_set_bg_color(&style, lv_color_white());
+  lv_style_set_radius(&style, 5);
+  lv_style_set_bg_opa(&style, LV_OPA_COVER);
+  lv_style_set_bg_color(&style, lv_color_white());
 
     /*Add a shadow*/
-    lv_style_set_shadow_width(&style, 55);
-    lv_style_set_shadow_color(&style, lv_palette_main(LV_PALETTE_BLUE));
+  lv_style_set_shadow_width(&style, 55);
+  lv_style_set_shadow_color(&style, lv_palette_main(LV_PALETTE_BLUE));
     //    lv_style_set_shadow_ofs_x(&style, 10);
     //    lv_style_set_shadow_ofs_y(&style, 20);
 
     /*Create an object with the new style*/
-    lv_obj_t * obj = lv_obj_create(lv_scr_act());
-    lv_obj_add_style(obj, &style, 0);
-    lv_obj_center(obj);
-    lv_obj_set_size(obj, 470, 790);
+  lv_obj_t * obj = lv_obj_create(lv_scr_act());
+  lv_obj_add_style(obj, &style, 0);
+  lv_obj_center(obj);
+  lv_obj_set_size(obj, 470, 790);
 }
 
 void lv_soil_temp_icon(int pos_x, int pos_y) {
@@ -60,8 +61,8 @@ void lv_air_temp_icon(int pos_x, int pos_y) {
   
   LV_IMG_DECLARE(air_temp_icon);
   img = lv_img_create(lv_scr_act());
+  
   lv_img_set_src(img, &air_temp_icon);
-
   lv_obj_align(img, LV_ALIGN_TOP_LEFT, pos_x, pos_y);
   lv_obj_set_size(img, 100, 100);
 }
@@ -220,6 +221,16 @@ void lv_btn_start(void)
   lv_obj_center(label);
 }
 
+void lv_qrcode_gen(void)
+{
+    //dtostrf(lat_pos, 4,10, lat_c);
+    //dtostrf(long_pos, 4,10, long_c);
+    auto ui_qrcode = lv_qrcode_create(lv_scr_act() ,180, lv_color_black(), lv_color_white());
+    char *qr_data = "https://www.google.com/";
+    lv_qrcode_update(ui_qrcode, qr_data, strlen(qr_data));
+    lv_obj_center(ui_qrcode);
+}
+
 static void set_value(void * indic, int32_t v)
 {
     lv_meter_set_indicator_end_value(meter,(lv_meter_indicator_t *)indic, v);
@@ -326,22 +337,10 @@ void setup()
     lv_bar_ver(999, 125, top_pos_ver+440+5);
 
     lv_btn_start();
-
-    // To use third party libraries, enable the define in lv_conf.h: #define LV_USE_QRCODE 1
-    float lat_pos = 16.4474378;
-    float long_pos = 103.5416264;
-    char lat_c[30];
-    char long_c[30];
-    //dtostrf(lat_pos, 4,10, lat_c);
-    //dtostrf(long_pos, 4,10, long_c);
-    //auto ui_qrcode = lv_qrcode_create(lv_scr_act() ,180, lv_color_black(), lv_color_white());
-    //char *qr_data = "https://www.google.com/maps/@"+lat_c+","+long_c+",19z";
-    //lv_qrcode_update(ui_qrcode, qr_data, strlen(qr_data));
-    //lv_obj_center(ui_qrcode);
+    lv_qrcode_gen();
 }
 
 void loop()
 {
     lv_timer_handler();
-   //main Loop Test
 }
