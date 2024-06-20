@@ -4,7 +4,7 @@
 #include "lvgl.h"
 #include <src/extra/libs/qrcode/lv_qrcode.h>
 
-//TEST GIT
+
 static lv_obj_t * meter;
 
 void lv_background(void)
